@@ -1,7 +1,7 @@
-# Hotel Management System
+# Food Delivery System 
 
 ## Project Overview
-The **Hotel Management System** is a web-based application that allows users to book and manage hotel rooms. It provides an **Admin Panel** for managing users and room bookings and a **User Dashboard** for viewing and booking available rooms.
+The **Food Delivery System** is a web-based application that allows users to book and manage hotel rooms. It provides an **Admin Panel** for managing users and room bookings and a **User Dashboard** for viewing and booking available rooms.
 
 ## Prerequisites
 Before running this project, ensure you have the following installed on your system:
