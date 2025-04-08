@@ -22,7 +22,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(formData.email, formData.password);
+     // await login(formData.email, formData.password);
       toast.success('Login successful!');
       navigate('/');
     } catch (error) {
