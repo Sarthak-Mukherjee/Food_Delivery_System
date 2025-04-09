@@ -6,7 +6,7 @@ import { useOrdersStore } from '../store/useOrdersStore';
 import toast from 'react-hot-toast';
 
 function OrderStatusBadge({ status }: { status: string }) {
-  switch (status) {
+  switch (status.toLowerCase()) {
     case 'pending':
       return (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -47,7 +47,7 @@ function OrderStatusBadge({ status }: { status: string }) {
 function Orders() {
   const { user } = useAuthStore();
   const { orders, isLoading, error, fetchOrders, cancelOrder } = useOrdersStore();
-  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -55,7 +55,7 @@ function Orders() {
     }
   }, [user, fetchOrders]);
 
-  const handleCancelOrder = async (orderId: string) => {
+  const handleCancelOrder = async (orderId: number) => {
     try {
       await cancelOrder(orderId);
       toast.success('Order cancelled successfully');
@@ -65,7 +65,7 @@ function Orders() {
     }
   };
 
-  const toggleOrderDetails = (orderId: string) => {
+  const toggleOrderDetails = (orderId: number) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
 
@@ -124,32 +124,35 @@ function Orders() {
 
       <div className="space-y-6">
         {orders.map((order) => (
-          <div key={order?.id ?? Math.random()} className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div key={order.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="p-6 border-b border-gray-200">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Order #{order?.id?? 'N/A'}
+                    Order #{order.id}
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
-                    Placed on {order?.createdAt ? formatDate(order.createdAt) : 'Unknown date'}
+                    Placed on {formatDate(order.dateTime)}
                   </p>
                 </div>
-                <OrderStatusBadge status={order?.status ?? 'unknown'} />
+                <OrderStatusBadge status={order.status} />
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium text-gray-900">
-                    Total: {typeof order?.total === 'number' ? `$${order.total.toFixed(2)}` : 'N/A'}
+                    Total: ₹
+                    {Array.isArray(order.foodItems)
+                      ? order.foodItems.reduce((sum, item) => sum + (item?.price ?? 0), 0).toFixed(2)
+                      : '0.00'}
                   </p>
                   <p className="text-sm text-gray-600">
-                    {Array.isArray(order?.items) ? order.items.length : 0} items
+                    {Array.isArray(order.foodItems) ? order.foodItems.length : 0} items
                   </p>
                 </div>
 
                 <div className="flex space-x-2">
-                  {order?.status === 'pending' && (
+                  {order.status.toLowerCase() === 'pending' && (
                     <button
                       onClick={() => handleCancelOrder(order.id)}
                       className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200"
@@ -169,35 +172,23 @@ function Orders() {
               </div>
             </div>
 
-            {expandedOrder === order.id && Array.isArray(order.items) && (
+            {expandedOrder === order.id && Array.isArray(order.foodItems) && (
               <div className="p-6 bg-gray-50">
                 <h4 className="font-medium text-gray-900 mb-4">Order Items</h4>
                 <div className="space-y-4">
-                  {order.items.map((item) => (
-                    <div key={item?.id ?? Math.random()} className="flex items-start">
-                      {item?.foodItem?.image ? (
-                        <img
-                          src={item.foodItem.image}
-                          alt={item.foodItem.name ?? 'Item'}
-                          className="w-16 h-16 object-cover rounded-md"
-                        />
-                      ) : (
-                        <div className="w-16 h-16 bg-gray-200 rounded-md" />
-                      )}
+                  {order.foodItems.map((item) => (
+                    <div key={item.id} className="flex items-start">
+                      <div className="w-16 h-16 bg-gray-200 rounded-md" />
 
                       <div className="ml-4">
-                        <h5 className="font-medium text-gray-900">{item?.foodItem?.name ?? 'Unnamed Item'}</h5>
-                        <p className="text-sm text-gray-600">
-                          ${item?.foodItem?.price?.toFixed(2) ?? '0.00'} × {item?.quantity ?? 1}
-                        </p>
+                        <h5 className="font-medium text-gray-900">{item.name}</h5>
+                        <p className="text-sm text-gray-600">₹{item.price?.toFixed(2)}</p>
+                        <p className="text-sm text-gray-500">{item.description}</p>
                       </div>
 
                       <div className="ml-auto text-right">
                         <span className="font-medium text-gray-900">
-                          $
-                          {item?.foodItem?.price && item?.quantity
-                            ? (item.foodItem.price * item.quantity).toFixed(2)
-                            : '0.00'}
+                          ₹{item.price?.toFixed(2)}
                         </span>
                       </div>
                     </div>

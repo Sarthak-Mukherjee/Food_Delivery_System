@@ -41,6 +41,7 @@ export const useOrdersStore = create<OrdersState>((set) => ({
     try {
       set({ isLoading: true, error: null });
       const userOrders = await orders.getByUser(userId);
+      console.log(userOrders)
       set({ orders: userOrders, isLoading: false });
     } catch (error) {
       console.error('Failed to fetch orders:', error);

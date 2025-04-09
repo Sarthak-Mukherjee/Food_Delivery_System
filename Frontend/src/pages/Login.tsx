@@ -22,11 +22,8 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-<<<<<<< HEAD
       await login(formData.username, formData.password);
-=======
      // await login(formData.email, formData.password);
->>>>>>> 225d20b8d2f0cfc1f1350e6dffe97763be42b5bd
       toast.success('Login successful!');
       navigate('/');
     } catch (error) {

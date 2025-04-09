@@ -165,7 +165,7 @@ function Menu() {
                   >
                     {item.name}
                   </h3>
-                  <span className="text-orange-600 font-bold">${item.price.toFixed(2)}</span>
+                  <span className="text-orange-600 font-bold">₹{item.price.toFixed(2)}</span>
                 </div>
                 <div className="flex items-center mt-1 mb-2">
                   <Star className="h-4 w-4 text-yellow-500 fill-current" />
