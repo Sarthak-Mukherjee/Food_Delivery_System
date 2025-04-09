@@ -1,7 +1,7 @@
-# Hotel Management System
+# Food Delivery System 
 
 ## Project Overview
-The **Hotel Management System** is a web-based application that allows users to book and manage hotel rooms. It provides an **Admin Panel** for managing users and room bookings and a **User Dashboard** for viewing and booking available rooms.
+The **Food Delivery System** is a web-based application that allows users to book and manage hotel rooms. It provides an **Admin Panel** for managing users and room bookings and a **User Dashboard** for viewing and booking available rooms.
 
 ## Prerequisites
 Before running this project, ensure you have the following installed on your system:
@@ -17,7 +17,7 @@ Before running this project, ensure you have the following installed on your sys
 **Write in Terminal or cmd after opening cmd inside a folder**
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-repo/hotel-management.git
+   git clone https://github.com/your-repo/food-delivery-system.git
    cd backend
    ```
 Create a Wrokspace in Eclipse for this project folder
@@ -26,7 +26,7 @@ Import just the project in the backend folder
    Ensure the MySQL connection details are correctly set in `src/main/resources/application.properties`:
 
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/hotel_db
+   spring.datasource.url=jdbc:mysql://localhost:3306/dbFood
    spring.datasource.password=yourpassword
    spring.jpa.hibernate.ddl-auto=update
    spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
