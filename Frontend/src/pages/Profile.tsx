@@ -30,8 +30,8 @@ function Profile() {
       return;
     }
 
-    setName(user.name);
-    setEmail(user.email);
+    setName(user.username);
+
     
     const fetchAddresses = async () => {
       try {

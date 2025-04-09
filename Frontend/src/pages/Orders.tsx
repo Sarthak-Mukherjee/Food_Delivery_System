@@ -92,8 +92,8 @@ function Orders() {
     return (
       <div className="max-w-4xl mx-auto text-center py-12">
         <p className="text-red-600">{error}</p>
-        <button 
-          onClick={() => fetchOrders()} 
+        <button
+          onClick={() => fetchOrders()}
           className="mt-4 px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
         >
           Try Again
@@ -121,31 +121,35 @@ function Orders() {
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
-      
+
       <div className="space-y-6">
-        {Array.isArray(orders) && orders.map((order) => (
-          <div key={order.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+        {orders.map((order) => (
+          <div key={order?.id ?? Math.random()} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="p-6 border-b border-gray-200">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Order #{order.id.substring(0, 8)}
+                    Order #{order?.id?? 'N/A'}
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
-                    Placed on {formatDate(order.createdAt)}
+                    Placed on {order?.createdAt ? formatDate(order.createdAt) : 'Unknown date'}
                   </p>
                 </div>
-                <OrderStatusBadge status={order.status} />
+                <OrderStatusBadge status={order?.status ?? 'unknown'} />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">Total: ${order.total.toFixed(2)}</p>
-                  <p className="text-sm text-gray-600">{Array.isArray(order.items) ? order.items.length : 0} items</p>
+                  <p className="font-medium text-gray-900">
+                    Total: {typeof order?.total === 'number' ? `$${order.total.toFixed(2)}` : 'N/A'}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {Array.isArray(order?.items) ? order.items.length : 0} items
+                  </p>
                 </div>
-                
+
                 <div className="flex space-x-2">
-                  {order.status === 'pending' && (
+                  {order?.status === 'pending' && (
                     <button
                       onClick={() => handleCancelOrder(order.id)}
                       className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200"
@@ -154,7 +158,7 @@ function Orders() {
                       Cancel
                     </button>
                   )}
-                  
+
                   <button
                     onClick={() => toggleOrderDetails(order.id)}
                     className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200"
@@ -164,27 +168,36 @@ function Orders() {
                 </div>
               </div>
             </div>
-            
-            {expandedOrder === order.id && (
+
+            {expandedOrder === order.id && Array.isArray(order.items) && (
               <div className="p-6 bg-gray-50">
                 <h4 className="font-medium text-gray-900 mb-4">Order Items</h4>
                 <div className="space-y-4">
-                  {Array.isArray(order.items) && order.items.map((item) => (
-                    <div key={item.id} className="flex items-start">
-                      <img
-                        src={item.foodItem.image}
-                        alt={item.foodItem.name}
-                        className="w-16 h-16 object-cover rounded-md"
-                      />
+                  {order.items.map((item) => (
+                    <div key={item?.id ?? Math.random()} className="flex items-start">
+                      {item?.foodItem?.image ? (
+                        <img
+                          src={item.foodItem.image}
+                          alt={item.foodItem.name ?? 'Item'}
+                          className="w-16 h-16 object-cover rounded-md"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 bg-gray-200 rounded-md" />
+                      )}
+
                       <div className="ml-4">
-                        <h5 className="font-medium text-gray-900">{item.foodItem.name}</h5>
+                        <h5 className="font-medium text-gray-900">{item?.foodItem?.name ?? 'Unnamed Item'}</h5>
                         <p className="text-sm text-gray-600">
-                          ${item.foodItem.price.toFixed(2)} × {item.quantity}
+                          ${item?.foodItem?.price?.toFixed(2) ?? '0.00'} × {item?.quantity ?? 1}
                         </p>
                       </div>
+
                       <div className="ml-auto text-right">
                         <span className="font-medium text-gray-900">
-                          ${(item.foodItem.price * item.quantity).toFixed(2)}
+                          $
+                          {item?.foodItem?.price && item?.quantity
+                            ? (item.foodItem.price * item.quantity).toFixed(2)
+                            : '0.00'}
                         </span>
                       </div>
                     </div>

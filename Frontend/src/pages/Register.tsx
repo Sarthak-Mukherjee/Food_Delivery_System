@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useAuthStore } from '../store/useAuthStore';
+import axios from 'axios';
 
 export default function Register() {
   const navigate = useNavigate();
+  const { register } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
     confirmPassword: '',
+    role: 'CUSTOMER',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,6 +25,7 @@ export default function Register() {
     setIsLoading(true);
     try {
       // Registration logic will be implemented here
+      await register(formData.username, formData.password,formData.role);
       toast.success('Registration successful!');
       navigate('/login');
     } catch (error) {
@@ -36,16 +40,16 @@ export default function Register() {
       <h1 className="text-3xl font-bold text-center mb-8">Create an Account</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+            User Name
           </label>
           <input
-            type="email"
-            id="email"
+            type="text"
+            id="username"
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            value={formData.username}
+            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
           />
         </div>
         
@@ -80,7 +84,7 @@ export default function Register() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+          className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? 'Creating account...' : 'Create Account'}
         </button>

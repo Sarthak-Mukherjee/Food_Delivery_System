@@ -67,6 +67,7 @@ export const food = {
   getAll: async () => {
     // Matches FoodItemController.getAll
     const response = await api.get('/food/all');
+    
     return response.data;
   },
   getById: async (id: string) => {

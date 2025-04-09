@@ -1,8 +1,7 @@
 export interface User {
   id: string;
-  name: string;
-  email: string;
-  role: 'user' | 'admin';
+  username: string;
+  role: 'CUSTOMER' | 'ADMIN';
 }
 
 export interface FoodItem {

@@ -5,7 +5,7 @@ import axios from 'axios';
 // For development, use the localhost URL; for production use relative path
 const isDevelopment = import.meta.env.DEV;
 const baseURL = isDevelopment 
-  ? 'http://localhost:8080/api'  // Updated to match Spring Boot default port
+  ? 'http://localhost:8186/api'  // Updated to match Spring Boot default port
   : '/api';  // Production - change to your deployed backend URL if needed
 
 const api = axios.create({
@@ -33,13 +33,15 @@ export const auth = {
     });
     return response.data;
   },
-  register: async (name, email, password) => {
+  register: async (username, password,role) => {
     // Updated to match AuthController.register
+    console.log(username, password,role);
     const response = await api.post('/auth/register', { 
-      username: email, // Using email as username
+      username, // Using email as username
       password,
-      name
+      role
     });
+    console.log(response.data);
     return response.data;
   },
   logout: async () => {

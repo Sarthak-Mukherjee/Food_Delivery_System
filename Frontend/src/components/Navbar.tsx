@@ -5,6 +5,7 @@ import { useAuthStore } from '../store/useAuthStore';
 
 function Navbar() {
   const { user, logout } = useAuthStore();
+  console.log(user)
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -41,7 +42,7 @@ function Navbar() {
                   Orders
                 </Link>
 
-                {user.role === 'admin' && (
+                {user.role === 'ADMIN' && (
                   <Link
                     to="/admin"
                     className="text-gray-700 hover:text-orange-600"
@@ -55,7 +56,7 @@ function Navbar() {
                   className="flex items-center space-x-2 text-gray-700 hover:text-orange-600"
                 >
                   <User className="w-6 h-6" />
-                  <span>{user.name}</span>
+                  <span>{user.username}</span>
                 </Link>
 
                 <button

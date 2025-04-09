@@ -3,34 +3,29 @@ import { User } from '../types';
 import { auth } from '../lib/api';
 
 // Mock user for development testing
-const MOCK_USER: User = {
-  id: '1',
-  name: 'Test User',
-  email: 'test@example.com',
-  role: 'user'
-};
 
 // Set to false to use real backend authentication
-const USE_MOCK_USER = false;
+
 
 interface AuthState {
   user: User | null;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
+  register: (username: string,  password: string, role:string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   // Use real authentication
-  user: USE_MOCK_USER ? MOCK_USER : null,
+  user: null,
   isLoading: false,
   error: null,
-  login: async (email, password) => {
+  login: async (username, password) => {
     try {
       set({ isLoading: true, error: null });
-      const { user, token } = await auth.login(email, password);
+      const { user, token } = await auth.login(username, password);
+      console.log('Login successful:', user,token);
       localStorage.setItem('token', token);
       set({ user, isLoading: false });
     } catch (err) {
@@ -38,10 +33,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ error: 'Invalid credentials', isLoading: false });
     }
   },
-  register: async (name, email, password) => {
+  register: async (username, password,role) => {
     try {
       set({ isLoading: true, error: null });
-      const { user, token } = await auth.register(name, email, password);
+      const { user, token } = await auth.register(username, password,role);
       localStorage.setItem('token', token);
       set({ user, isLoading: false });
     } catch (err) {
