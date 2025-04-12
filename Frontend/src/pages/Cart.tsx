@@ -47,10 +47,11 @@ function Cart() {
       toast.error('Your cart is empty');
       return;
     }
-
+  
     setIsCheckingOut(true);
     try {
-      const orderId = await checkout();
+      // Pass the user ID to the checkout function
+      const orderId = await checkout(user.id);  // Send the user ID here
       if (!orderId) throw new Error('Failed to place order');
       toast.success('Order placed successfully!');
       navigate('/orders');
@@ -61,6 +62,7 @@ function Cart() {
       setIsCheckingOut(false);
     }
   };
+  
 
   if (isLoading) {
     return (
@@ -109,7 +111,7 @@ function Cart() {
           <div key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             {/* Placeholder image – update if you have an image field */}
             <img
-              src="/images/placeholder.jpg"
+              src= {`http://localhost:8186/images/${item.image}`}
               alt={item.name}
               className="w-full h-48 object-cover"
             />
