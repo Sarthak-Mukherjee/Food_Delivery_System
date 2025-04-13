@@ -4,9 +4,11 @@ import { LogIn } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import toast from 'react-hot-toast';
 
+
 export default function Login() {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuthStore();
+  const { login, isLoading  } = useAuthStore();
+  const {error} = useAuthStore();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -21,15 +23,18 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await login(formData.username, formData.password);
-     // await login(formData.email, formData.password);
-      toast.success('Login successful!');
-      navigate('/');
-    } catch (error) {
-      toast.error('Invalid credentials');
+  
+    const success = await login(formData.username, formData.password);
+  
+    if (success) {
+      toast.success("Login successful!");
+      navigate("/");
+    } else {
+      toast.error("Invalid username or password");
     }
   };
+  
+
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center">

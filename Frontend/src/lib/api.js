@@ -25,14 +25,26 @@ api.interceptors.request.use((config) => {
 });
 
 export const auth = {
-  login: async (email, password) => {
-    // Updated to match AuthController.login
-    const response = await api.post('/auth/login', { 
-      username: email, // Using email as username
-      password 
-    });
-    return response.data;
-  },
+  // services/auth.ts
+// auth.ts
+login: async (username, password) => { 
+  try {
+    const response = await api.post('/auth/login', { username, password });
+
+    const { user, token } = response.data;
+    return { user, token };
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.response?.status === 401) {
+        throw new Error('Invalid credentials');
+      }
+      throw new Error('Login failed');
+    }
+    throw new Error('Unknown error occurred');
+  }
+}
+,
+  
   register: async (username, password,role) => {
     // Updated to match AuthController.register
     console.log(username, password,role);
@@ -47,6 +59,13 @@ export const auth = {
   logout: async () => {
     localStorage.removeItem('token');
   },
+  
+    getAll: async () => {
+      const response = await api.get('/auth/users');
+      return response.data;
+    
+  }
+  
 };
 
 export const users = {
@@ -120,7 +139,7 @@ export const cart = {
 export const orders = {
   getAll: async () => {
     // Matches OrderController.getAllOrders
-    const response = await api.get('/orders');
+    const response = await api.get('/orders/');
     return response.data;
   },
   getById: async (orderId) => {
@@ -138,11 +157,19 @@ export const orders = {
     const response = await api.post(`/orders/place/${userId}`);
     return response.data;
   },
+  updateStatus: async (orderId, status) => {
+    // Matches OrderController.updateOrderStatus
+    const response = await api.put(`/orders/update-status/${orderId}`, null, {
+      params: { status }
+    });
+    return response.data;
+  },
   cancel: async (orderId) => {
     // Uses OrderController.deleteOrder
     const response = await api.delete(`/orders/${orderId}`);
     return response.data;
   },
+
 };
 
 // The remaining API sections might need to be updated once their corresponding

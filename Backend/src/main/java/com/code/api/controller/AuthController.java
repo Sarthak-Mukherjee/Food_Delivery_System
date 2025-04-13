@@ -4,6 +4,7 @@ import com.code.api.entity.User;
 import com.code.api.services.IUserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,6 +30,10 @@ public class AuthController {
     	System.out.println(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.save(user);
+    }
+    @GetMapping("/users")
+    public List<User> getAllUsers(){
+    	return userService.findAll();
     }
 
     @PostMapping("/login")

@@ -36,16 +36,18 @@ public class SecurityConfig {
         http.csrf().disable()
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/api/auth/**",     // register/login
-                    "/api/cart/**",     // allow cart actions
-                    "/api/orders/**",    // allow placing orders
-                    "/api/food/**"      // allow fetching food items
+                    "/images/**",        // ✅ allow static images
+                    "/api/auth/**",      // register/login
+                    "/api/cart/**",      // cart actions
+                    "/api/orders/**",    // placing orders
+                    "/api/food/**"       // fetching food items
                 ).permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
             )
-            .formLogin().disable()   // Disable Spring form login
-            .httpBasic().disable(); // Disable browser popup Basic Auth
+            .formLogin().disable()
+            .httpBasic().disable();
+        
 
         return http.build();
     }

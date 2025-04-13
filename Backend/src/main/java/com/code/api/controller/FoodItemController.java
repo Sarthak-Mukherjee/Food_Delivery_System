@@ -25,7 +25,11 @@ public class FoodItemController {
         return foodItemService.save(item);
     }
 
-    // New delete endpoint
+    @PutMapping("/update/{id}")
+    public FoodItem updateFood(@PathVariable int id, @RequestBody FoodItem updatedItem) {
+        return foodItemService.update(id, updatedItem);
+    }
+
     @DeleteMapping("/delete/{id}")
     public String deleteFood(@PathVariable int id) {
         return foodItemService.deleteById(id);

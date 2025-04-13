@@ -28,8 +28,13 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> findAll() {
-        return orderRepository.findAll();
+        List<Order> orders = orderRepository.findAll();
+      
+
+
+        return orders;
     }
+
 
     @Override
     public Order findById(int id) {
@@ -50,7 +55,6 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> findByUserId(int userId) {
-        // Fetch the user first, then find the orders related to that user
         User user = userRepo.findById(userId).orElse(null);
         if (user == null) return new ArrayList<>();
         return orderRepository.findByUser(user);
@@ -58,18 +62,14 @@ public class OrderService implements IOrderService {
 
     @Override
     public Order placeOrder(int userId) {
-        // Fetch user from userRepo
         User user = userRepo.findById(userId).orElse(null);
         if (user == null) return null;
 
-        // Fetch the user's cart from cartService
         Cart cart = cartService.findByUser(user);
         if (cart == null || cart.getFoodItems() == null || cart.getFoodItems().isEmpty()) return null;
 
-        // Collect the food items from the cart
         List<FoodItem> foodItems = new ArrayList<>(cart.getFoodItems());
 
-        // Create the order object and save it
         Order order = new Order();
         order.setUser(user);
         order.setFoodItems(foodItems);
@@ -77,8 +77,6 @@ public class OrderService implements IOrderService {
         order.setStatus("Placed");
 
         Order savedOrder = orderRepository.save(order);
-
-        // Clear the cart after placing the order
         cartService.clearCart(user);
 
         return savedOrder;

@@ -36,11 +36,12 @@ public class DataLoader implements CommandLineRunner {
 
         // Create food items if not exist
         if (foodItemRepository.findAll().isEmpty()) {
-            FoodItem f1 = new FoodItem("Margherita Pizza", "Classic cheese pizza", 249.0);
-            FoodItem f2 = new FoodItem("Veg Burger", "Fresh bun with veggie patty", 149.0);
-            FoodItem f3 = new FoodItem("Paneer Tikka", "Spicy grilled paneer cubes", 199.0);
-            FoodItem f4 = new FoodItem("Fried Rice", "Veg fried rice with soy sauce", 179.0);
-            FoodItem f5 = new FoodItem("Choco Lava Cake", "Delicious molten chocolate cake", 99.0);
+            // Adding categories and images for each food item
+            FoodItem f1 = new FoodItem("Margherita Pizza", "Classic cheese pizza", 249.0, "Pizza", "pizza.jpg");
+            FoodItem f2 = new FoodItem("Veg Burger", "Fresh bun with veggie patty", 149.0, "Burger", "burger.jpg");
+            FoodItem f3 = new FoodItem("Paneer Tikka", "Spicy grilled paneer cubes", 199.0, "Starter", "paneer.jpg");
+            FoodItem f4 = new FoodItem("Fried Rice", "Veg fried rice with soy sauce", 179.0, "Main Course", "rice.jpg");
+            FoodItem f5 = new FoodItem("Choco Lava Cake", "Delicious molten chocolate cake", 99.0, "Dessert", "cake.jpg");
 
             foodItemRepository.saveAll(Arrays.asList(f1, f2, f3, f4, f5));
             System.out.println("Default food items created.");
